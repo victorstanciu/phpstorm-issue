@@ -1,0 +1,148 @@
+# PhpStorm Docker/PHPUnit issue report
+
+## Steps to reproduce:
+
+- Checkout this repository
+- `docker-compose up -d`
+- `docker-compose exec app composer install`
+- Set up the remote PHP interpreter in PhpStorm:
+  ![](https://user-images.githubusercontent.com/25879/171601643-3c8ba4d3-fe0e-4329-991f-ed4e787fb608.png)
+- Try to set up PHPunit via remote interpreter:
+  ![](https://user-images.githubusercontent.com/25879/171601765-2dd535a0-217b-4682-8cc8-89d586c1977b.png)
+
+  
+## Extra information:
+
+Executing the file mentioned in the error message works:
+
+```
+❯ docker-compose exec app /var/www/vendor/phpunit/phpunit/phpunit --version
+PHPUnit 9.5.20 #StandWithUkraine
+```
+
+`idea.log` entry:
+
+```
+2022-06-02 11:29:46,330 [1850526]   WARN - #c.j.p.t.u.PhpTestFrameworkVersionComponent - Cannot parse PHPUnit version output: Could not open input file: /var/www/vendor/phpunit/phpunit/phpunit
+
+com.intellij.execution.ExecutionException: Cannot parse PHPUnit version output: Could not open input file: /var/www/vendor/phpunit/phpunit/phpunit
+
+    at com.jetbrains.php.phpunit.PhpUnitVersionDetector.parse(PhpUnitVersionDetector.java:41)
+    at com.jetbrains.php.phpunit.PhpUnitVersionDetector.parse(PhpUnitVersionDetector.java:13)
+    at com.jetbrains.php.PhpTestFrameworkVersionDetector.getVersion(PhpTestFrameworkVersionDetector.java:42)
+    at com.jetbrains.php.phpunit.PhpUnitConfigurableForm$PhpUnitVersionLabel.reloadVersion(PhpUnitConfigurableForm.java:464)
+    at com.jetbrains.php.phpunit.PhpUnitConfigurableForm$PhpUnitVersionLabel.lambda$new$0(PhpUnitConfigurableForm.java:397)
+    at com.jetbrains.php.ui.PhpUiUtil$2.lambda$actionPerformed$0(PhpUiUtil.java:117)
+    at com.intellij.util.ui.EdtInvocationManager.invokeLaterIfNeeded(EdtInvocationManager.java:101)
+    at com.intellij.util.ui.UIUtil.invokeLaterIfNeeded(UIUtil.java:2125)
+    at com.jetbrains.php.ui.PhpUiUtil$2.actionPerformed(PhpUiUtil.java:116)
+    at com.intellij.openapi.actionSystem.impl.ActionButton.actionPerformed(ActionButton.java:182)
+    at com.intellij.openapi.actionSystem.impl.ActionButton.lambda$performAction$0(ActionButton.java:158)
+    at com.intellij.openapi.actionSystem.ex.ActionUtil.performDumbAwareWithCallbacks(ActionUtil.java:256)
+    at com.intellij.openapi.actionSystem.impl.ActionButton.performAction(ActionButton.java:158)
+    at com.intellij.openapi.actionSystem.impl.ActionButton.processMouseEvent(ActionButton.java:464)
+    at java.desktop/java.awt.Component.processEvent(Component.java:6419)
+    at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+    at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5029)
+    at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+    at java.desktop/java.awt.Component.dispatchEvent(Component.java:4861)
+    at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+    at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+    at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+    at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+    at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2793)
+    at java.desktop/java.awt.Component.dispatchEvent(Component.java:4861)
+    at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:778)
+    at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:727)
+    at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+    at java.base/java.security.AccessController.doPrivileged(Native Method)
+    at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+    at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+    at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:751)
+    at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:749)
+    at java.base/java.security.AccessController.doPrivileged(Native Method)
+    at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+    at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:748)
+    at com.intellij.ide.IdeEventQueue.defaultDispatchEvent(IdeEventQueue.java:898)
+    at com.intellij.ide.IdeEventQueue.dispatchMouseEvent(IdeEventQueue.java:820)
+    at com.intellij.ide.IdeEventQueue._dispatchEvent(IdeEventQueue.java:743)
+    at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$6(IdeEventQueue.java:439)
+    at com.intellij.openapi.progress.impl.CoreProgressManager.computePrioritized(CoreProgressManager.java:803)
+    at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$7(IdeEventQueue.java:438)
+    at com.intellij.openapi.application.TransactionGuardImpl.performActivity(TransactionGuardImpl.java:106)
+    at com.intellij.ide.IdeEventQueue.performActivity(IdeEventQueue.java:604)
+    at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$8(IdeEventQueue.java:436)
+    at com.intellij.openapi.application.impl.ApplicationImpl.runIntendedWriteActionOnCurrentThread(ApplicationImpl.java:873)
+    at com.intellij.ide.IdeEventQueue.dispatchEvent(IdeEventQueue.java:484)
+    at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:207)
+    at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:128)
+    at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:121)
+    at java.desktop/java.awt.WaitDispatchSupport$2.run(WaitDispatchSupport.java:190)
+    at java.desktop/java.awt.WaitDispatchSupport$4.run(WaitDispatchSupport.java:235)
+    at java.desktop/java.awt.WaitDispatchSupport$4.run(WaitDispatchSupport.java:233)
+    at java.base/java.security.AccessController.doPrivileged(Native Method)
+    at java.desktop/java.awt.WaitDispatchSupport.enter(WaitDispatchSupport.java:233)
+    at java.desktop/java.awt.Dialog.show(Dialog.java:1070)
+    at com.intellij.openapi.ui.impl.DialogWrapperPeerImpl$MyDialog.show(DialogWrapperPeerImpl.java:702)
+    at com.intellij.openapi.ui.impl.DialogWrapperPeerImpl.show(DialogWrapperPeerImpl.java:439)
+    at com.intellij.openapi.ui.DialogWrapper.doShow(DialogWrapper.java:1668)
+    at com.intellij.openapi.ui.DialogWrapper.show(DialogWrapper.java:1626)
+    at com.intellij.ide.actions.ShowSettingsUtilImpl.showSettingsDialog(ShowSettingsUtilImpl.java:90)
+    at com.intellij.ide.actions.ShowSettingsAction.perform(ShowSettingsAction.java:50)
+    at com.intellij.ide.actions.ShowSettingsAction.actionPerformed(ShowSettingsAction.java:37)
+    at com.intellij.openapi.actionSystem.ex.ActionUtil.lambda$performActionDumbAwareWithCallbacks$4(ActionUtil.java:235)
+    at com.intellij.openapi.actionSystem.ex.ActionUtil.performDumbAwareWithCallbacks(ActionUtil.java:256)
+    at com.intellij.openapi.actionSystem.ex.ActionUtil.performActionDumbAwareWithCallbacks(ActionUtil.java:235)
+    at com.intellij.openapi.actionSystem.impl.ActionMenuItem$ActionTransmitter.lambda$performAction$0(ActionMenuItem.java:289)
+    at com.intellij.openapi.wm.impl.FocusManagerImpl.runOnOwnContext(FocusManagerImpl.java:233)
+    at com.intellij.openapi.actionSystem.impl.ActionMenuItem$ActionTransmitter.performAction(ActionMenuItem.java:281)
+    at com.intellij.openapi.actionSystem.impl.ActionMenuItem$ActionTransmitter.actionPerformed(ActionMenuItem.java:296)
+    at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+    at com.intellij.openapi.actionSystem.impl.ActionMenuItem.lambda$fireActionPerformed$2(ActionMenuItem.java:111)
+    at com.intellij.openapi.application.TransactionGuardImpl.performActivity(TransactionGuardImpl.java:106)
+    at com.intellij.openapi.application.TransactionGuardImpl.performUserActivity(TransactionGuardImpl.java:95)
+    at com.intellij.openapi.actionSystem.impl.ActionMenuItem.fireActionPerformed(ActionMenuItem.java:111)
+    at com.intellij.ui.plaf.beg.BegMenuItemUI.doClick(BegMenuItemUI.java:540)
+    at com.intellij.ui.plaf.beg.BegMenuItemUI$MyMouseInputHandler.mouseReleased(BegMenuItemUI.java:570)
+    at java.desktop/java.awt.Component.processMouseEvent(Component.java:6654)
+    at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3345)
+    at java.desktop/java.awt.Component.processEvent(Component.java:6419)
+    at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+    at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5029)
+    at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+    at java.desktop/java.awt.Component.dispatchEvent(Component.java:4861)
+    at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+    at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+    at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+    at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+    at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2793)
+    at java.desktop/java.awt.Component.dispatchEvent(Component.java:4861)
+    at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:778)
+    at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:727)
+    at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+    at java.base/java.security.AccessController.doPrivileged(Native Method)
+    at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+    at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+    at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:751)
+    at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:749)
+    at java.base/java.security.AccessController.doPrivileged(Native Method)
+    at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+    at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:748)
+    at com.intellij.ide.IdeEventQueue.defaultDispatchEvent(IdeEventQueue.java:898)
+    at com.intellij.ide.IdeEventQueue.dispatchMouseEvent(IdeEventQueue.java:820)
+    at com.intellij.ide.IdeEventQueue._dispatchEvent(IdeEventQueue.java:743)
+    at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$6(IdeEventQueue.java:439)
+    at com.intellij.openapi.progress.impl.CoreProgressManager.computePrioritized(CoreProgressManager.java:803)
+    at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$7(IdeEventQueue.java:438)
+    at com.intellij.openapi.application.TransactionGuardImpl.performActivity(TransactionGuardImpl.java:119)
+    at com.intellij.ide.IdeEventQueue.performActivity(IdeEventQueue.java:604)
+    at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$8(IdeEventQueue.java:436)
+    at com.intellij.openapi.application.impl.ApplicationImpl.runIntendedWriteActionOnCurrentThread(ApplicationImpl.java:873)
+    at com.intellij.ide.IdeEventQueue.dispatchEvent(IdeEventQueue.java:484)
+    at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:207)
+    at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:128)
+    at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:117)
+    at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:113)
+    at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:105)
+    at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:92)
+```

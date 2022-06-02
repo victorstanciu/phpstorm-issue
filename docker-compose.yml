@@ -1,0 +1,8 @@
+version: '3.7'
+services:
+  app:
+    build: .
+    volumes:
+        - ./composer.json:/var/www/composer.json
+        - ./composer.lock:/var/www/composer.lock
+    
